@@ -10,6 +10,7 @@
 namespace App\HttpController\Admin;
 
 
+use App\Exception\ShowException;
 use App\Service\Admin\UserService;
 
 class User extends Base
@@ -22,20 +23,26 @@ class User extends Base
     public function __construct()
     {
         parent::__construct();
-        $this->service = new UserService();
     }
 
     public function login()
     {
-        $token = $this->service->login($this->validateData['name'], $this->validateData['password']);
+        $token = $this->getService()->login($this->validateData['name'], $this->validateData['password']);
         $this->writeSuccess("登录成功", $token);
     }
 
     public function register()
     {
         $data = $this->validateData;
-        $this->service->register($data);
+        $this->getService()->register($data);
         $this->writeSuccess("注册成功");
+    }
+
+    protected function getService() {
+        if (empty($this->service)) {
+            $this->service = new UserService();
+        }
+        return $this->service;
     }
 
 }

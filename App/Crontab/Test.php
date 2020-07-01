@@ -25,13 +25,13 @@ class Test extends Base
         return "test";
     }
 
-    function run(int $taskId, int $workerIndex)
-    {
-        console('test doing...');
-    }
-
     function onException(\Throwable $throwable, int $taskId, int $workerIndex)
     {
         Logger::getInstance()->info("crontab error {$taskId} : {$workerIndex}. " . $throwable->getMessage());
+    }
+
+    public function job(int $taskId, int $workerIndex)
+    {
+        console("test doing taskId:{$taskId}&workerIndex:{$workerIndex}...");
     }
 }

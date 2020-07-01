@@ -1,0 +1,576 @@
+{
+	"info": {
+		"_postman_id": "ea8a3ae3-ad43-44a2-82f1-bc0f577e56ea",
+		"name": "easy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "crontab",
+					"item": [
+						{
+							"name": "list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/crontab/list",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"crontab",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "run",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/crontab/exec?name=test",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"crontab",
+										"exec"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "test"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "stop",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/crontab/stop?name=test",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"crontab",
+										"stop"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "test"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "resume",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/crontab/resume?name=test",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"crontab",
+										"resume"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "test"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "87d5c076-4820-4f78-8b45-ec6f828ef9be",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "988ab4e9-52d5-4e2e-8b6a-fcdef24d10de",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "redis",
+					"item": [
+						{
+							"name": "list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/redis/list?cursor=0",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"redis",
+										"list"
+									],
+									"query": [
+										{
+											"key": "cursor",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "test",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/redis/test",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"redis",
+										"test"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "array",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/redis/array?page=1&name=test_list",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"redis",
+										"array"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "name",
+											"value": "test_list"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "set",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/redis/select?name=test_set&pattern=asd",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"redis",
+										"select"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "test_set"
+										},
+										{
+											"key": "pattern",
+											"value": "asd"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "zset",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/redis/select?name=test_zset",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"redis",
+										"select"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "test_zset"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "hash",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/redis/select?name=test_hash",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"redis",
+										"select"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "test_hash"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "task",
+					"item": [
+						{
+							"name": "list",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "bfd92174-f73b-4e4b-baa9-eb3b18b4b55e",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{admin_url}}/task/list",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"task",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deal",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/task/deal?name=TestTask",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"task",
+										"deal"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "TestTask"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/task/status?id=2",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"task",
+										"status"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "39de02b5-ea1a-4d33-a47a-fb110ad02225",
+										"exec": [
+											"let res = pm.response.json()\r",
+											"\r",
+											"if(res.code == 200) {\r",
+											"    pm.environment.set(\"token\", res.data['token'])\r",
+											"    console.log('set environment success')\r",
+											"} else {\r",
+											"    console.log(res.msg)\r",
+											"    throw res.msg\r",
+											"}\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "{{admin_user}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{admin_password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{admin_url}}/user/login",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jenson",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "810204005@qq.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{admin_url}}/user/register",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "test",
+					"item": [
+						{
+							"name": "test",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/test/index",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"test",
+										"index"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "header",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9579f951-bcc0-47f3-a519-41be54761a95",
+										"exec": [
+											"\r",
+											"console.log(pm.request)\r",
+											"pm.request.headers.add({\r",
+											"    'key': \"jenson_test\",\r",
+											"    'value': \"jenson_test123\",\r",
+											"})\r",
+											"\r",
+											"console.log(pm.variables.get(\"test_var\"));\r",
+											"console.log(pm.variables.get(\"test_env\"));\r",
+											"console.log(pm.variables.get(\"test_gobal\"));\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{admin_url}}/test/header",
+									"host": [
+										"{{admin_url}}"
+									],
+									"path": [
+										"test",
+										"header"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a6e440fe-f97e-4652-b10b-b78d33502dec",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "5a4d50c1-fb45-4e11-8be2-8bcbd4d80b6e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
