@@ -57,7 +57,7 @@ class Page
 
     public function start()
     {
-        return ($this->page - 1) * $this->pageSize ;
+        return ($this->page - 1) * $this->pageSize;
     }
 
     public function offset()
@@ -70,24 +70,26 @@ class Page
         if (empty($this->page) || ! is_numeric($this->page) || $this->page < -1) {
             $this->page = 1;
         }
-        if (empty($this->pageSize) || is_numeric($this->pageSize) || $this->pageSize > $this->maxPageSize) {
+        if (empty($this->pageSize) || ! is_numeric($this->pageSize) || $this->pageSize > $this->maxPageSize) {
             $this->pageSize = $this->defaultPageSize;
         }
     }
 
-    public function generatePage($rows)
+    public function generatePage($rows, $total = null)
     {
-        return [
+        $counts = is_null($total) ? [] : ['total' => $total, 'total_page' => ceil($total / $this->getPageSize())];
+
+        return array_merge($counts, [
             'page' => count($rows) > 0 ? $this->getPage() + 1 : -1,
-            'pageSize' => $this->getPageSize(),
+            'page_size' => $this->getPageSize(),
             'data' => $rows,
-        ];
+        ]);
     }
 
     public function checkEmpty()
     {
         if ($this->page == -1) {
-            throw new PageEmptyException('');
+            throw new PageEmptyException($this);
         }
     }
 

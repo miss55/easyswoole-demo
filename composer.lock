@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94ee31da7644403b127700a397adef1c",
+    "content-hash": "7a563949314d55579352e4b323b8bf1a",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -681,6 +681,63 @@
                 "swoole"
             ],
             "time": "2020-03-27T01:51:02+00:00"
+        },
+        {
+            "name": "easyswoole/kafka",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/easy-swoole/kafka.git",
+                "reference": "3eb2e6ee357da0cdb356751f374359bb8acb1b1c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/easy-swoole/kafka/zipball/3eb2e6ee357da0cdb356751f374359bb8acb1b1c",
+                "reference": "3eb2e6ee357da0cdb356751f374359bb8acb1b1c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "easyswoole/component": "^2.0",
+                "easyswoole/spl": "^1.1",
+                "ext-swoole": "^4.4.5",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "easyswoole/phpunit": "^1.0",
+                "easyswoole/swoole-ide-helper": "^1.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EasySwoole\\Kafka\\": "src/",
+                    "EasySwoole\\Kafka\\Test\\": "test/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "YF",
+                    "email": "291323003@qq.com"
+                }
+            ],
+            "description": "An efficient swoole framework",
+            "homepage": "https://www.easyswoole.com/",
+            "keywords": [
+                "async",
+                "easyswoole",
+                "framework",
+                "swoole"
+            ],
+            "time": "2020-06-06T11:51:24+00:00"
         },
         {
             "name": "easyswoole/log",
@@ -3240,13 +3297,15 @@
         "easyswoole/validate": 20,
         "easyswoole/orm": 20,
         "easyswoole/redis": 20,
-        "easyswoole/elasticsearch": 20
+        "easyswoole/elasticsearch": 20,
+        "easyswoole/kafka": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "ext-pcntl": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-mbstring": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"

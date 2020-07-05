@@ -27,4 +27,9 @@ class Test extends Base
         $header = $this->request()->getHeaders();
         $this->writeSuccess($header);
     }
+
+    public function kafka()
+    {
+
+    }
 }

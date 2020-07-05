@@ -96,7 +96,9 @@ function get_basename($class)
  */
 function get_redis($name)
 {
-    return \EasySwoole\Pool\Manager::getInstance()->get($name)->getObj();
+    $pool = \EasySwoole\Pool\Manager::getInstance()->get($name);
+    // console($pool->status());
+    return $pool->defer();
 }
 
 /**
@@ -139,4 +141,13 @@ function set_elastic_search(\EasySwoole\ElasticSearch\ElasticSearch $search)
 function get_elastic_search()
 {
     return Di::getInstance()->get('elastic_search')->client();
+}
+
+/**
+ * 返回当前日期
+ * @return string
+ */
+function now()
+{
+    return date('Y-m-d H:i:s');
 }

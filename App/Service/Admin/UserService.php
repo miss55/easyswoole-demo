@@ -19,6 +19,7 @@ use EasySwoole\Utility\Hash;
 class UserService
 {
     const SECRET_KEY = 'jenson.wen';
+    const EXPIRE = 86400;
 
     public function login($name, $password)
     {
@@ -94,7 +95,7 @@ class UserService
         $time = time();
         $jwtObject->setAlg('HMACSHA256'); // 加密方式
         $jwtObject->setAud($user->name); // 用户
-        $jwtObject->setExp($time + 7200); // 过期时间
+        $jwtObject->setExp($time + self::EXPIRE); // 过期时间
         $jwtObject->setIat($time); // 发布时间
         $jwtObject->setIss(self::SECRET_KEY); // 发行人
         $jwtObject->setJti(md5($time)); // jwt id 用于标识该jwt

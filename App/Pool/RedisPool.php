@@ -37,7 +37,7 @@ class RedisPool extends AbstractPool
     protected function createObject()
     {
         //根据传入的redis配置进行new 一个redis
-        return new Redis($this->redisConfig);
+        return new RedisObject($this->redisConfig);
 
     }
 }

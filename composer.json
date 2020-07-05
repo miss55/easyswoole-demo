@@ -14,7 +14,9 @@
     "easyswoole/orm": "dev-master",
     "ext-json": "*",
     "easyswoole/redis": "dev-master",
-    "easyswoole/elasticsearch": "dev-master"
+    "easyswoole/elasticsearch": "dev-master",
+    "ext-mbstring": "*",
+    "easyswoole/kafka": "dev-master"
   },
   "minimum-stability": "dev",
   "repositories": {

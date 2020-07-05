@@ -11,7 +11,7 @@ namespace App\Command;
 
 use EasySwoole\EasySwoole\Command\CommandInterface;
 
-interface BaseCommand extends CommandInterface
+abstract class BaseCommand implements CommandInterface
 {
 
 }
