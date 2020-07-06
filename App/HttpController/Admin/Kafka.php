@@ -34,7 +34,7 @@ class Kafka extends Auth
         if (empty($this->index)) {
             $this->index = 0;
         }
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $result = $kafka->producer()->send([
                 [
                     'topic' => 'topic_test',

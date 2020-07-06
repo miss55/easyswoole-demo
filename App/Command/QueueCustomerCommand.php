@@ -27,7 +27,7 @@ class QueueCustomerCommand extends BaseCommand
 
     public function commandName(): string
     {
-        return "queue_customer";
+        return "queue";
     }
 
     public function exec(array $args): ?string

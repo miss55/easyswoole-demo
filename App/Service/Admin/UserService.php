@@ -19,7 +19,7 @@ use EasySwoole\Utility\Hash;
 class UserService
 {
     const SECRET_KEY = 'jenson.wen';
-    const EXPIRE = 86400;
+    const EXPIRE = 86400 * 10;
 
     public function login($name, $password)
     {

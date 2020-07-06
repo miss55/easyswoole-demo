@@ -74,6 +74,7 @@ class CustomerManage
             $pool->getProcess()->name($processName);
             if ($table->exist($workerId) && $table->get('running') == false) {
                 sleep(2);
+
                 return null;
             }
             RedisProvider::register();
@@ -83,15 +84,20 @@ class CustomerManage
                 'workId' => $workerId,
                 'running' => $running,
             ]);
-            $consumer = (new Process($config))->getConsumer();
+            $consumers = [];
+            foreach (range(0, 3) as $index) {
+                $consumers[] = (new Process($config))->getConsumer();
+            }
 
-            pcntl_signal(SIGTERM, function () use ($table, $consumer, &$running, $workerId) {
+            pcntl_signal(SIGTERM, function () use ($table, $consumers, &$running, $workerId) {
                 Logger::getInstance()->info("exit ... {$workerId}");
                 $row = $table->get($workerId);
                 $running = false;
                 $row['running'] = $running;
                 $table->set($workerId, $row);
-                $consumer->stop();
+                foreach ($consumers as $consumer) {
+                    $consumer->stop();
+                }
                 Timer::clearAll();
             });
 
@@ -117,14 +123,19 @@ class CustomerManage
             });
 
             // 设置消费回调
-            $func = function ($topic, $partition, $message) use ($atomic) {
+            $func = function ($topic, $partition, $message) use ($workerId, $atomic) {
                 $atomic->add();
                 $message = $message['message'];
                 \co::sleep(3.0);
                 # ["customer ==> ","topic_deal",0,{"offset":4,"size":41,"message":{"crc":81777897,"magic":1,"attr":0,"timestamp":1593952938,"key":"what","value":"i am topic_deal"}}]
-                console("do ...customer ==> ", $message['value']);
+                console("do ...customer ==> workerId:{$workerId} partition:{$partition}", $message['value']);
             };
-            $consumer->subscribe($func);
+            foreach ($consumers as $consumer) {
+                go(function () use ($func, $consumer) {
+                    $consumer->subscribe($func);
+                });
+            }
+
         });
 
         $pool->on("WorkerStop", function ($pool, $workerId) {
