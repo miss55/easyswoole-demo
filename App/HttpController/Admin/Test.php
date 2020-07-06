@@ -10,6 +10,8 @@
 namespace App\HttpController\Admin;
 
 
+use App\Api\TestApi;
+
 class Test extends Base
 {
     public function index()
@@ -28,8 +30,21 @@ class Test extends Base
         $this->writeSuccess($header);
     }
 
-    public function kafka()
+    public function testUnique()
     {
+        $result = [];
+        foreach (range(0, 10) as $index) {
+            $result[] = uniqid();
+        }
 
+        return $this->writeSuccess('成功', array_unique($result));
+    }
+
+    public function testApi()
+    {
+        $api = new TestApi();
+        $result = $api->getTestError();
+
+        return $this->writeSuccess('', $result);
     }
 }

@@ -76,6 +76,22 @@ function json_encode_chinese($value)
     return json_encode($value, JSON_UNESCAPED_UNICODE);
 }
 
+function is_json_str($str)
+{
+    $end = substr($str, -1);
+    if (strpos($str, '[') === 0) {
+        if ($end == ']') {
+            return true;
+        }
+    } else if (strpos($str, '{') === 0) {
+        if ($end == '}') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function get_basename($class)
 {
     $arr = explode("\\", $class);
@@ -97,6 +113,7 @@ function get_basename($class)
 function get_redis($name)
 {
     $pool = \EasySwoole\Pool\Manager::getInstance()->get($name);
+
     // console($pool->status());
     return $pool->defer();
 }
@@ -145,6 +162,7 @@ function get_elastic_search()
 
 /**
  * 返回当前日期
+ *
  * @return string
  */
 function now()

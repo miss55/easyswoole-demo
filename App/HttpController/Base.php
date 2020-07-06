@@ -79,7 +79,7 @@ class Base extends Controller
             $data = $msg;
             $msg = 'success';
         }
-        $this->writeJson(200, $data, $msg);
+        return $this->writeJson(200, $data, $msg);
     }
 
     /**
