@@ -10,6 +10,7 @@
 namespace App\Provider;
 
 
+use App\Model\ComStatic;
 use EasySwoole\EasySwoole\Swoole\EventRegister;
 
 class MainServerProvider
@@ -26,5 +27,7 @@ class MainServerProvider
         RedisProvider::register();
         MysqlProvider::bindEvent($register);
         ElasticSearchProvider::register();
+        KafkaProducerProvider::register();
+        RabbitMqProvider::register();
     }
 }

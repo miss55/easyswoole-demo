@@ -10,7 +10,7 @@
 namespace App\Command;
 
 
-use App\Third\Kafka\CustomerManage;
+use App\Third\Kafka\Manage;
 
 /**
  * 使用easyswoole扩展easyswoole/kafka 做队列处理
@@ -22,7 +22,7 @@ use App\Third\Kafka\CustomerManage;
  *
  * @package App\Command
  */
-class QueueCustomerCommand extends BaseCommand
+class KafkaQueueCustomerCommand extends BaseCommand
 {
 
     public function commandName(): string
@@ -32,7 +32,7 @@ class QueueCustomerCommand extends BaseCommand
 
     public function exec(array $args): ?string
     {
-        $manage = new CustomerManage();
+        $manage = new Manage();
         $output = [];
         if (in_array('start', $args)) {
             $manage->start();

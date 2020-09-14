@@ -10,6 +10,7 @@
 namespace App\Third\Kafka;
 
 
+use App\Helper\Helper;
 use App\Provider\RedisProvider;
 use EasySwoole\EasySwoole\Logger;
 use EasySwoole\Kafka\Config\ConsumerConfig;
@@ -55,9 +56,10 @@ class Process
         $customerConfig->setBrokerVersion($config['version']);
         $customerConfig->setConsumeMode($config['consume_mode']);
 
-        $customerConfig->setGroupId('group_test');
-        $customerConfig->setTopics(['topic_test']);
-
+        $group = data_get($config, 'group', 'group_test');
+        $customerConfig->setGroupId($group);
+        $topic = data_get($config, 'topic', 'topic_test');
+        $customerConfig->setTopics(is_array($topic) ? $topic : [$topic]);
         $customerConfig->setOffsetReset('earliest');
 
         $kafka = new Kafka($customerConfig);

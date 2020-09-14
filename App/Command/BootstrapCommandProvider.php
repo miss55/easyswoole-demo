@@ -12,13 +12,29 @@ namespace App\Command;
 
 class BootstrapCommandProvider
 {
+    private static $list;
+
     public static function register()
     {
-        self::add(new QueueCustomerCommand());
+        self::setList();
+        foreach (self::$list as $class) {
+            self::add(new $class);
+        }
+    }
+
+    public static function setList()
+    {
+        $list = [];
+        $list[] = RedisSubscribeCommand::class;
+        $list[] = KafkaQueueCustomerCommand::class;
+        $list[] = MysqlCommand::class;
+        $list[] = RabbitMqCustomerCommand::class;
+        self::$list = $list;
     }
 
     /**
      * 添加命令实例
+     *
      * @param $instance
      */
     public static function add($instance)

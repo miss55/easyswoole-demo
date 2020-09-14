@@ -16,7 +16,8 @@
     "easyswoole/redis": "dev-master",
     "easyswoole/elasticsearch": "dev-master",
     "ext-mbstring": "*",
-    "easyswoole/kafka": "dev-master"
+    "easyswoole/kafka": "dev-master",
+    "php-amqplib/php-amqplib": "^2.12@dev"
   },
   "minimum-stability": "dev",
   "repositories": {

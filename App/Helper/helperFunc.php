@@ -161,6 +161,32 @@ function get_elastic_search()
 }
 
 /**
+ * @return \EasySwoole\Kafka\Producer
+ * @throws \EasySwoole\Pool\Exception\PoolEmpty
+ */
+function get_kafka_producer()
+{
+    $pool = \EasySwoole\Pool\Manager::getInstance()->get
+    (\App\Provider\KafkaProducerProvider::NAME);
+
+    // console($pool->status());
+    return $pool->defer();
+}
+
+/**
+ * @return \App\Third\RabbitMq\RabbitMqProducer
+ * @throws \EasySwoole\Pool\Exception\PoolEmpty
+ */
+function get_rabbit_producer()
+{
+    $pool = \EasySwoole\Pool\Manager::getInstance()->get
+    (\App\Provider\RabbitMqProvider::NAME);
+
+    // console($pool->status());
+    return $pool->defer();
+}
+
+/**
  * 返回当前日期
  *
  * @return string

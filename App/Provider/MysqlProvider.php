@@ -10,6 +10,7 @@
 namespace App\Provider;
 
 
+use App\Model\BaseTest;
 use EasySwoole\EasySwoole\Swoole\EventRegister;
 use EasySwoole\ORM\Db\Config;
 use EasySwoole\EasySwoole\Config as GlobalConfig;
@@ -20,8 +21,8 @@ class MysqlProvider
 {
     public static function initialize()
     {
-        $config = new Config(GlobalConfig::getInstance()->getConf("MYSQL"));
-        DbManager::getInstance()->addConnection(new Connection($config));
+        self::setDb('MYSQL', 'default');
+        self::setDb('MYSQL2', BaseTest::CONNECTION_NAME);
     }
 
     public static function bindEvent(EventRegister $register)
@@ -30,5 +31,11 @@ class MysqlProvider
             //链接预热
             DbManager::getInstance()->getConnection()->getClientPool()->keepMin();
         });
+    }
+
+    private static function setDb($configName, $name = 'default')
+    {
+        $config = new Config(GlobalConfig::getInstance()->getConf($configName));
+        DbManager::getInstance()->addConnection(new Connection($config), $name);
     }
 }

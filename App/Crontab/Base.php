@@ -11,6 +11,7 @@ namespace App\Crontab;
 
 
 use EasySwoole\EasySwoole\Crontab\AbstractCronTask;
+use EasySwoole\EasySwoole\Logger;
 
 abstract class Base extends AbstractCronTask implements CrontabInterface
 {
@@ -26,6 +27,11 @@ abstract class Base extends AbstractCronTask implements CrontabInterface
         $this->before($taskId, $workerIndex);
         $this->job($taskId, $workerIndex);
         $this->after($taskId, $workerIndex);
+    }
+
+    function onException(\Throwable $throwable, int $taskId, int $workerIndex)
+    {
+        Logger::getInstance()->info("crontab error {$taskId} : {$workerIndex}. " . $throwable->getMessage());
     }
 
     private function before(int $taskId, int $workerIndex)

@@ -13,7 +13,9 @@ namespace App\HttpController\Admin;
 use App\Exception\CursorEmptyException;
 use App\Exception\PageEmptyException;
 use App\Helper\CursorPage;
+use App\Model\ComStatic;
 use App\Service\Admin\RedisService;
+use function foo\func;
 
 class Redis extends Auth
 {
@@ -22,6 +24,10 @@ class Redis extends Auth
      */
     public $service;
 
+    public function testCount()
+    {
+        return $this->writeSuccess("index:". ComStatic::getInstance()->get());
+    }
     /**
      * 列表
      *
@@ -77,6 +83,14 @@ class Redis extends Auth
             $index++;
         }
         $this->writeSuccess($index);
+    }
+
+    public function pub()
+    {
+        $redis = get_redis('redis');
+        foreach (range(0, 10) as $index) {
+            $redis->publish("test", json_encode_chinese(['a' => $index]));
+        }
     }
 
     protected function getCursorPage()

@@ -30,7 +30,7 @@ class Logger implements LoggerInterface
         $prefix = date('Ymd');
         $date = date('Y-m-d H:i:s');
         $levelStr = $this->levelMap($logLevel);
-        $filePath = $this->generateFilePath($category, $levelStr) . "/log_{$prefix}.log";
+        $filePath = $this->generateFilePath($category) . "/log_{$levelStr}_{$prefix}.log";
         $str = "[{$date}][{$levelStr}]:{$msg}\n";
         file_put_contents($filePath, "{$str}", FILE_APPEND | LOCK_EX);
 
@@ -63,11 +63,8 @@ class Logger implements LoggerInterface
         }
     }
 
-    private function generateFilePath($category, $logLevelStr)
+    private function generateFilePath($category)
     {
-        if (in_array($logLevelStr, ['error', 'notice'])) {
-            $category .= $category ? ".{$logLevelStr}" : $logLevelStr;
-        }
         $path = str_replace('.', '/', $category);
 
         $path = "{$this->logDir}/{$path}";

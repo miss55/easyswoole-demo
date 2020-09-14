@@ -10,10 +10,6 @@
 namespace App\HttpController\Admin;
 
 
-use EasySwoole\EasySwoole\Config;
-use EasySwoole\Kafka\Config\ProducerConfig;
-use EasySwoole\Kafka\Kafka as EasyKafka;
-
 class Kafka extends Auth
 {
     private $index;
@@ -25,26 +21,27 @@ class Kafka extends Auth
      */
     public function test()
     {
-        $config = Config::getInstance()->getConf("KAFKA");
-        $producerConfig = new ProducerConfig();
-        $producerConfig->setMetadataBrokerList(implode(",", $config['brokers']));
-        $producerConfig->setBrokerVersion($config['version']);
-        $producerConfig->setRequiredAck(1);
-        $kafka = new EasyKafka($producerConfig);
+
         if (empty($this->index)) {
             $this->index = 0;
         }
-        for ($i = 0; $i < 20; $i++) {
-            $result = $kafka->producer()->send([
+        $producer = get_kafka_producer();
+
+        for ($i = 0; $i < 1; $i++) {
+            $result = $producer->send([
                 [
-                    'topic' => 'topic_test',
-                    'value' => "{$this->index}",
+                    'topic' => 'test_group',
+                    'value' => json_encode_chinese([
+                            'name' => "商品名称--{$this->index}===" . mt_rand(1, 1000),
+                            // 'num' => mt_rand(1, 5),
+                            // 'total' => ((mt_rand(200, 100000) * 1.00) / 100). "",
+                            // 'status' => 1,
+                        ]),
                     'key' => '',
                 ],
             ]);
             $this->index++;
         }
-
         $this->writeSuccess("ok", $result);
     }
 }

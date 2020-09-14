@@ -20,6 +20,8 @@ class Base extends AbstractModel
     const STATUS_INACTIVE = 0;
     private $orderFlag = false;
 
+    protected $where = [];
+
     public static function fastInvoke(\Closure $func)
     {
         return DbManager::getInstance()->invoke($func);
@@ -49,5 +51,28 @@ class Base extends AbstractModel
         }
 
         return parent::order(...$args);
+    }
+    public function allByYield()
+    {
+        $size = 300;
+        $idName = "{$this->tableName}.id";
+        $this->order($idName, SORT_ASC);
+        while (true) {
+            $rows = $this->page(1, $size)->all();
+            if (empty($rows)) {
+                break;
+            }
+            yield $rows;
+            if (count($rows) < $size) {
+                break;
+            }
+
+            foreach ($this->where as $index => $where) {
+                if ($where[0] == $idName) {
+                    unset($this->where[$index]);
+                }
+            }
+            $this->where($idName, end($rows)['id'], '>');
+        }
     }
 }

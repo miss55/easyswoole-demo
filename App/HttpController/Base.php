@@ -55,7 +55,7 @@ class Base extends Controller
             $this->writeSuccess($throwable->getPage()->generatePage([]));
         } else if ($throwable instanceof ShowException) {
             $this->writeError($throwable->getMessage(), $throwable->data, $throwable->getCode());
-        } else if ($throwable instanceof \Exception) {
+        } else {
             $name = strtolower($this->getControllerParent());
             $category = "controller.{$name}";
             Helper::error("控制器捕获到一个异常", null, $throwable, $category);

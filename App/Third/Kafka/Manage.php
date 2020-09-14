@@ -10,58 +10,39 @@
 namespace App\Third\Kafka;
 
 
+use App\Helper\Helper;
+use App\Provider\MysqlProvider;
 use App\Provider\RedisProvider;
-use EasySwoole\EasySwoole\Config;
+use App\Third\AbstractConfig;
+use App\Third\AbstractManager;
 use EasySwoole\EasySwoole\Logger;
-use EasySwoole\Kafka\Config\ConsumerConfig;
-use EasySwoole\Kafka\Kafka;
-use Swoole\IDEHelper\StubGenerators\Swoole;
+use EasySwoole\Kafka\Consumer;
 use Swoole\Process\Pool;
-use Swoole\Runtime;
-use Swoole\Table;
 use Swoole\Timer;
-use function foo\func;
 
-class CustomerManage
+/**
+ * kafka 消费者管理
+ * Class Manage
+ *
+ * @package App\Third\Kafka
+ */
+class Manage extends AbstractManager
 {
-    /**
-     * @var array
-     */
-    private $config;
-    /**
-     * @var string
-     */
-    private $rootProcessName;
-    /**
-     * @var string
-     */
-    private $childProcessName;
-    /**
-     * @var string
-     */
-    private $baseProcessName;
-
-    public function __construct()
-    {
-        $this->init();
-    }
 
     /**
      * 启动进程池处理队列
      * 目前部分配置写死
      */
-    public function start()
+    protected function dealStart()
     {
-        swoole_set_process_name($this->rootProcessName);
-        Runtime::enableCoroutine();
-        $config = $this->config;
-        $poolConfig = $this->config['pool'];
-        $childName = $this->childProcessName;
+        $config = $this->config->getConfig();
+        $poolConfig = $this->config->getPoolConfig();
+        $childName = $this->config->getChildProcessName();
 
         $pool = new Pool($poolConfig['workerNum'], 0, 0, true);
 
-        $table = $this->getInitTable($poolConfig['workerNum']);
-        $atomic = new \Swoole\Atomic();
+        $table = $this->config->getTable();
+        $atomic = $this->config->getAtomic();
 
         // \Swoole\Process::daemon();
         \Swoole\Process::signal(SIGTERM, function (Pool $pool) {
@@ -78,6 +59,7 @@ class CustomerManage
                 return null;
             }
             RedisProvider::register();
+            MysqlProvider::initialize();
             $running = true;
 
             $table->set($workerId, [
@@ -85,7 +67,14 @@ class CustomerManage
                 'running' => $running,
             ]);
             $consumers = [];
-            foreach (range(0, 3) as $index) {
+            foreach (range(0, 1) as $index) {
+                # 测试不同group 订阅同一个topic topic写死
+                $config['topic'] = 'test_group';
+                if ($workerId == 0) {
+                    $config['group'] = 'g0';
+                } else {
+                    $config['group'] = 'g1';
+                }
                 $consumers[] = (new Process($config))->getConsumer();
             }
 
@@ -126,11 +115,21 @@ class CustomerManage
             $func = function ($topic, $partition, $message) use ($workerId, $atomic) {
                 $atomic->add();
                 $message = $message['message'];
-                \co::sleep(3.0);
+                // \co::sleep(3.0);
                 # ["customer ==> ","topic_deal",0,{"offset":4,"size":41,"message":{"crc":81777897,"magic":1,"attr":0,"timestamp":1593952938,"key":"what","value":"i am topic_deal"}}]
-                console("do ...customer ==> workerId:{$workerId} partition:{$partition}", $message['value']);
+                try {
+                    $order = new OrderConsumer($topic, $partition, $message);
+                    $order->setWorkerId($workerId);
+                    $order->run();
+                } catch (\Exception $e) {
+                    Helper::error("消费异常", null, $e);
+                }
             };
+            # 多消费者协程订阅
             foreach ($consumers as $consumer) {
+                /**
+                 * @var $consumer Consumer
+                 */
                 go(function () use ($func, $consumer) {
                     $consumer->subscribe($func);
                 });
@@ -146,87 +145,24 @@ class CustomerManage
     }
 
     /**
-     * 停止进程
-     */
-    public function stop()
-    {
-        $cmd = "ps -ef | grep \"{$this->rootProcessName}\" | grep -v grep | awk '{print $2}'| xargs kill -15";
-        exec($cmd);
-
-        return ["stop success"];
-    }
-
-    /**
-     * 展示进程状态
-     *
-     * @return array
-     */
-    public function status()
-    {
-        $cmd = "ps -ef | grep \"{$this->baseProcessName}\" | grep -v grep";
-        exec($cmd, $output);
-        if (empty($output)) {
-            $output = ["当前没进程..."];
-        } else {
-            array_unshift($output, "进程状态:");
-        }
-
-        return $output;
-    }
-
-    /**
      * 初始化配置
      */
-    private function init()
+    protected function init()
     {
-        $this->config = Config::getInstance()->getConf("KAFKA");
-        $this->baseProcessName = $this->config["pool"]['queueName'];
-        $this->rootProcessName = "{$this->baseProcessName}_root";
-        $this->childProcessName = "{$this->baseProcessName}_child";
+        parent::init();
+    }
+
+    protected function setConfig()
+    {
+        $this->config = new Config();
     }
 
     /**
-     * @return array
+     * @return Config|AbstractConfig
      */
-    public function getConfig(): array
+    public function getConfig()
     {
         return $this->config;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRootProcessName(): string
-    {
-        return $this->rootProcessName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getChildProcessName(): string
-    {
-        return $this->childProcessName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBaseProcessName()
-    {
-        return $this->baseProcessName;
-    }
-
-    private function getInitTable($workerNum)
-    {
-        $table = new Table(1024);
-        foreach (range(0, $workerNum - 1) as $num) {
-            $table->column('workId', \Swoole\Table::TYPE_INT, 4);
-            $table->column('running', \Swoole\Table::TYPE_INT, 4);
-        }
-        $table->create();
-
-        return $table;
     }
 
 }

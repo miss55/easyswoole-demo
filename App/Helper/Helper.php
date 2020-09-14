@@ -48,7 +48,7 @@ class Helper
     public static function error($msg, $args = null, $exception = null, $category = 'error')
     {
         $trace = "";
-        $argsString = empty($args) ? '' : "\n\targs:" . json_encode_chinese($args);
+        $argsString = empty($args) ? '' : "\n\targs:" . (is_array($args) ? json_encode_chinese($args) : $args);
         if (! empty($exception) && $exception instanceof \Throwable) {
             $msg .= " " . $exception->getMessage();
             $trace = self::formatExceptionTrace($exception);

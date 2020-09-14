@@ -11,6 +11,12 @@ namespace App\HttpController\Admin;
 
 
 use App\Api\TestApi;
+use App\Helper\Helper;
+use App\Helper\RedisLock;
+use App\Model\ComStatic;
+use App\Model\TestUserModel;
+use App\Service\Factory\Factory;
+use EasySwoole\Utility\Random;
 
 class Test extends Base
 {
@@ -30,6 +36,15 @@ class Test extends Base
         $this->writeSuccess($header);
     }
 
+    public function testRedisLock()
+    {
+        $lock = new RedisLock("test_123", 1000, '123456');
+        // $result = $lock->acquire();
+        $result = $lock->release();
+        console("===>", $result);
+
+    }
+
     public function testUnique()
     {
         $result = [];
@@ -46,5 +61,24 @@ class Test extends Base
         $result = $api->getTestError();
 
         return $this->writeSuccess('', $result);
+    }
+
+    public function testFactory()
+    {
+        return $this->writeSuccess("", [
+            ucfirst("what the fuck"),
+            ucwords("what the fuck"),
+        ]);
+    }
+
+    public function testStatic()
+    {
+        $count = ComStatic::getInstance()->get();
+        return $this->writeSuccess("index:". $count);
+    }
+
+    public function testSql()
+    {
+
     }
 }
