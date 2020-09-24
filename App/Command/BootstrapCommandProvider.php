@@ -29,6 +29,8 @@ class BootstrapCommandProvider
         $list[] = KafkaQueueCustomerCommand::class;
         $list[] = MysqlCommand::class;
         $list[] = RabbitMqCustomerCommand::class;
+        $list[] = Song::class;
+        $list[] = Test::class;
         self::$list = $list;
     }
 

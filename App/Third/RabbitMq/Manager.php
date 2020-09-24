@@ -37,7 +37,7 @@ class Manager extends AbstractManager
 
         $table = $confObj->getTable();
 
-        // \Swoole\Process::daemon();
+        \Swoole\Process::daemon();
         \Swoole\Process::signal(SIGTERM, function (Pool $pool) {
             $pool->shutdown();
             unset($pool);

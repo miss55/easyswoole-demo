@@ -29,6 +29,11 @@ class OrderConsumer
 
     public function run()
     {
+        if (true) {
+            console($this->message->body);
+            $this->message->ack();
+            return ;
+        }
         // console("workerId:{$this->workerId} partition:{$this->partition} ++1");
         // console("do ...customer ==> workerId:{$this->workerId} ", $this->message->body);
         $data = json_decode($this->message->body, true);

@@ -13,6 +13,7 @@ namespace App\HttpController\Admin;
 use App\Api\TestApi;
 use App\Helper\Helper;
 use App\Helper\RedisLock;
+use App\Helper\Validate\Validate;
 use App\Model\ComStatic;
 use App\Model\TestUserModel;
 use App\Service\Factory\Factory;
@@ -28,6 +29,33 @@ class Test extends Base
         $bean->setBody(['query' => ['match' => ['last_name' => 'Smith']]]);
         $response = get_elastic_search()->search($bean)->getBody();
         $this->writeSuccess('', json_decode($response, true));
+    }
+
+    public function testValidate()
+    {
+        $validate = new Validate();
+        $validateArray = $validate->validateArray('test');
+        $validateArray->addColumn('one')->required()->integer();
+        $validateArray->addColumn('two')->required()->notEmpty();
+
+        $validateAssociate = $validate->validateAssociate('two');
+        $validateAssociate->addColumn('a')->notEmpty();
+        $data = [
+            'test' => [
+                [
+                    'one' => 111, 'two' => 'asdfasdf'
+                ]
+            ],
+            'two' => ['a' => 'asdfasdf'],
+        ];
+        $validate->validOrThrowNewException($data);
+        return $this->writeSuccess('yes', $validate->getVerifiedData());
+    }
+
+    public function testCommand()
+    {
+        $test = new \App\Command\Test();
+        $test->exec(['stop']);
     }
 
     public function header()

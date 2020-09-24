@@ -73,10 +73,11 @@ class Process
         $consumers = [];
         $configs = $this->configObj->getConfig();
 
-        foreach (range(0, 19) as $item) {
+        foreach (range(0, 1) as $item) {
             $consumers[] = new RabbitCustomer($configs['cons']);
+            break;
         }
-
+        pcntl_async_signals(true);
         pcntl_signal(SIGTERM, function () use ($consumers) {
             Logger::getInstance()->info("exit ... {$this->workId}");
             $row = $this->table->get($this->workId);
@@ -107,11 +108,10 @@ class Process
                     });
                 }
                 \co::sleep(2.0);
-                pcntl_signal_dispatch();
             }
         });
 
-
+        console("===consumer count:". count($consumers));
         foreach ($consumers as $index => $consumer) {
             go(function () use($consumer, $index) {
                 /**

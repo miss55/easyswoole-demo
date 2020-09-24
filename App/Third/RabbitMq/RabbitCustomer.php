@@ -24,6 +24,7 @@ class RabbitCustomer extends RabbitMq
         while ($this->channel ->is_consuming()) {
             $this->channel->wait();
             \co::sleep(0.1);
+
         }
     }
 

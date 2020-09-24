@@ -44,7 +44,7 @@ class Manage extends AbstractManager
         $table = $this->config->getTable();
         $atomic = $this->config->getAtomic();
 
-        // \Swoole\Process::daemon();
+        \Swoole\Process::daemon();
         \Swoole\Process::signal(SIGTERM, function (Pool $pool) {
             $pool->shutdown();
             unset($pool);
@@ -70,14 +70,15 @@ class Manage extends AbstractManager
             foreach (range(0, 1) as $index) {
                 # 测试不同group 订阅同一个topic topic写死
                 $config['topic'] = 'test_group';
-                if ($workerId == 0) {
-                    $config['group'] = 'g0';
-                } else {
-                    $config['group'] = 'g1';
-                }
+                $config['group'] = 'test_group';
+                // if ($workerId == 0) {
+                //     $config['group'] = 'g0';
+                // } else {
+                //     $config['group'] = 'g1';
+                // }
                 $consumers[] = (new Process($config))->getConsumer();
             }
-
+            pcntl_async_signals(true);
             pcntl_signal(SIGTERM, function () use ($table, $consumers, &$running, $workerId) {
                 Logger::getInstance()->info("exit ... {$workerId}");
                 $row = $table->get($workerId);
@@ -92,11 +93,8 @@ class Manage extends AbstractManager
 
             go(function () use ($atomic, $workerId, &$running) {
                 while (true) {
-                    if (! $running) {
-                        break;
-                    }
                     if ($workerId == 0) {
-                        go(function () use ($atomic, $workerId) {
+                        go(function () use ($atomic) {
                             $count = $atomic->get();
                             if ($count > 0) {
                                 $redis = get_redis('redis');
@@ -107,7 +105,9 @@ class Manage extends AbstractManager
                         });
                     }
                     \co::sleep(2.0);
-                    pcntl_signal_dispatch();
+                    if (! $running) {
+                        break;
+                    }
                 }
             });
 

@@ -27,6 +27,8 @@ class Test extends Base
 
     public function job(int $taskId, int $workerIndex)
     {
+        console("test command begin...");
+        // exec("sh test.sh start");
         console("test doing taskId:{$taskId}&workerIndex:{$workerIndex}...");
     }
 }

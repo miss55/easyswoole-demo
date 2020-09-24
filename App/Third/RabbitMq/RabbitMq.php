@@ -40,7 +40,8 @@ class RabbitMq
     protected function setChannel()
     {
         $channel = $this->connection->channel();
-        $channel->queue_declare($this->queue, false, true, false, false);
+        $message = $channel->queue_declare($this->queue, false, true, false, false);
+        console("current ready message :", $message);
         $channel->exchange_declare($this->exchange, AMQPExchangeType::DIRECT, false, true, false);
         $channel->queue_bind($this->queue, $this->exchange);
         $this->channel = $channel;
